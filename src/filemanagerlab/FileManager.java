@@ -46,7 +46,7 @@ public class FileManager {
     public void addEntries(){
         PrintWriter in=null;
         try{
-            in=new PrintWriter(new BufferedWriter(new FileWriter(inputFile)));
+            in=new PrintWriter(new BufferedWriter(new FileWriter(inputFile,true)));
             
             in.println("Kyle Wirtz");
             in.println("2867 N Farwell ave");
@@ -72,18 +72,17 @@ public class FileManager {
             
             String name="";
             String state="";
-            for(int i=1;i<entry;i++){
+            for(int i=1;i<=entry;i++){
                 name=reader.readLine();
-                for(int j=i;j<2;j++){
-                    state=reader.readLine();
-                }
+                reader.readLine();
+                state=reader.readLine();
             }
             String[] parts=state.split(" ");
             
             switch(parts.length){
-                case 3:System.out.println(name+" "+parts[1]);
+                case 3: System.out.println(name+" "+parts[1]);
                     break;
-                case 4:System.out.println(name+" "+parts[2]);
+                case 4: System.out.println(name+" "+parts[2]);
                     break;
             }
             
