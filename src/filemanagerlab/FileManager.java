@@ -7,94 +7,126 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author dvandenberge
  */
 public class FileManager {
+
     private File inputFile;
-    
-    public FileManager(){
-        inputFile=new File("C:"+File.separatorChar+"temp"+File.separatorChar+"lab1"+File.separatorChar+"mailingList.txt");
+
+    public FileManager() {
+        inputFile = new File("C:" + File.separatorChar + "temp" + File.separatorChar + "lab1" + File.separatorChar + "mailingList.txt");
     }
-    
-    public void printEntries(){
-        BufferedReader reader=null;
-        try{
-            reader=new BufferedReader(new FileReader(inputFile));
-            
-            String line=reader.readLine();
-            
-            while(line!=null){
+
+    public void printEntries() {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(inputFile));
+
+            String line = reader.readLine();
+
+            while (line != null) {
                 System.out.println(line);
-                line=reader.readLine();
+                line = reader.readLine();
             }
-            
-        }catch(IOException e){
+
+        } catch (IOException e) {
             System.out.println("File cannot be read!");
-        }finally{
-            try{
+        } finally {
+            try {
                 reader.close();
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Critical System Failure");
             }
-    
+
         }
     }
-    
-    public void addEntries(){
-        PrintWriter in=null;
-        try{
-            in=new PrintWriter(new BufferedWriter(new FileWriter(inputFile,true)));
-            
+
+    public void addEntries() {
+        PrintWriter in = null;
+        try {
+            in = new PrintWriter(new BufferedWriter(new FileWriter(inputFile, true)));
+
             in.println("Kyle Wirtz");
             in.println("2867 N Farwell ave");
             in.print("Milwaukee, ");
             in.print("WI ");
             in.println("53211");
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("File cannot be written to");
-        }finally{
-            try{
+        } finally {
+            try {
                 in.close();
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Critical System Failure");
             }
         }
     }
-    
-    public void printEntry(int entry){
-        
-        BufferedReader reader=null;
-        try{
-            reader=new BufferedReader(new FileReader(inputFile));
-            
-            String name="";
-            String state="";
-            for(int i=1;i<=entry;i++){
-                name=reader.readLine();
+
+    public void printEntry(int entry) {
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(inputFile));
+
+            String name = "";
+            String state = "";
+            for (int i = 1; i <= entry; i++) {
+                name = reader.readLine();
                 reader.readLine();
-                state=reader.readLine();
+                state = reader.readLine();
             }
-            String[] parts=state.split(" ");
-            
-            switch(parts.length){
-                case 3: System.out.println(name+" "+parts[1]);
+            String[] parts = state.split(" ");
+
+            switch (parts.length) {
+                case 3:
+                    System.out.println(name + " " + parts[1]);
                     break;
-                case 4: System.out.println(name+" "+parts[2]);
+                case 4:
+                    System.out.println(name + " " + parts[2]);
                     break;
             }
-            
-        }catch(IOException e){
+
+        } catch (IOException e) {
             System.out.println("File cannot be read!");
-        }finally{
-            try{
+        } finally {
+            try {
                 reader.close();
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Critical System Failure");
             }
-    
+
         }
+    }
+
+    private Map<Integer,String[]> putEntriesInMap() {
+        BufferedReader reader = null;
+        Map<Integer,String[]> mailingMap = new HashMap<Integer,String[]>();
+        try {
+            reader = new BufferedReader(new FileReader(inputFile));
+            String line = reader.readLine();
+            for (int i = 1;line!=null;i++) {
+                String[] lines=new String[3];
+                lines[0]=line;
+                for(int j=1;j<3;j++){
+                    lines[j]=reader.readLine();
+                }
+                mailingMap.put(i,lines);
+                line=reader.readLine();
+            }
+        }catch(IOException ioe){
+            System.out.println("Whoops");
+        }
+        return mailingMap;
+    }
+    
+    public String getEntry(int i){
+        Map myMap=putEntriesInMap();
+        String[] returnArray=(String[])myMap.get(i);
+        return returnArray[0]+" "+returnArray[1]+" "+returnArray[2];
     }
 }
